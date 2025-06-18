@@ -1,0 +1,46 @@
+<div *ngIf="loading">Cargando...</div>
+<div *ngIf="error">Ocurrió un error: {{ error.message }}</div>
+<div *ngIf="detail">
+  <h2>{{ detail.name }}</h2>
+  <img [src]="detail.image" alt="{{ detail.name }}" width="200" />
+  <p>Status: {{ detail.status }}</p>
+  <p>Species: {{ detail.species }}</p>
+  <p>Type: {{ detail.type || "N/A" }}</p>
+  <p>Gender: {{ detail.gender }}</p>
+  <p>Created: {{ detail.created | date }}</p>
+  <h3>Origen</h3>
+  <p>Nombre: {{ detail.origin.name }}</p>
+  <p>Tipo: {{ detail.origin.type }}</p>
+  <p>Dimension: {{ detail.origin.dimension }}</p>
+  <p>
+    Residente ejemplo:
+    <span *ngIf="detail.origin.residents.length > 0">
+      {{ detail.origin.residents[0]?.name }}
+    </span>
+    <span *ngIf="detail.origin.residents.length === 0"
+      >No tiene residentes</span
+    >
+  </p>
+  <h3>Localización</h3>
+  <p>Nombre: {{ detail.location.name }}</p>
+  <p>Tipo: {{ detail.location.type }}</p>
+  <p>Dimension: {{ detail.location.dimension }}</p>
+  <p>
+    Residente ejemplo:
+    <span *ngIf="detail.location.residents.length > 0">
+      {{ detail.location.residents[0]?.name }}
+    </span>
+    <span *ngIf="detail.location.residents.length === 0"
+      >No tiene residentes</span
+    >
+  </p>
+  <h3>Episodio</h3>
+  <ng-container *ngIf="detail.episode.length > 0; else noEpisode">
+    <div>
+      {{ detail.episode[0]?.name }} ({{ detail.episode[0]?.episode }}) emitido
+      en
+      {{ detail.episode[0]?.air_date }}
+    </div>
+  </ng-container>
+  <ng-template #noEpisode>No tiene episodios</ng-template>
+</div>
