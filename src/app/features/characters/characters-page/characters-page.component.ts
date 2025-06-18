@@ -45,14 +45,8 @@ export class CharactersPageComponent {
   pageIndex = signal(0);
   totalResults = signal(0);
 
-  speciesTotals = computed(() => {
-    const result: { [species: string]: number } = {};
-    for (const char of this.dataSource()) {
-      const key = char.species || 'Desconocido';
-      result[key] = (result[key] || 0) + 1;
-    }
-    return result;
-  });
+  speciesTotals = computed(() => this.getTotals('species'));
+  typeTotals = computed(() => this.getTotals('type'));
 
   constructor(
     private characterService: CharacterService,
@@ -60,53 +54,8 @@ export class CharactersPageComponent {
     private store: Store
   ) {}
 
-  typeTotals = computed(() => {
-    const result: { [type: string]: number } = {};
-    for (const char of this.dataSource()) {
-      const key = char.type || 'Desconocido';
-      result[key] = (result[key] || 0) + 1;
-    }
-    return result;
-  });
-
   ngOnInit() {
     this.loadPage();
-  }
-
-  loadPage() {
-    this.characterService
-      .getCharacters({
-        name: this.filterName(),
-        status: this.filterStatus(),
-        page: this.pageIndex() + 1,
-      })
-      .subscribe({
-        next: (res) => {
-          this.dataSource.set(res.results);
-          this.totalResults.set(res.info.count);
-        },
-        error: () => {
-          this.dataSource.set([]);
-          this.totalResults.set(0);
-        },
-      });
-  }
-
-  loadCharacterDetail(character: any) {
-    this.loadingDetail.set(true);
-    this.errorDetail.set(null);
-
-    this.characterGraphql.getCharacterDetail(character.id).subscribe({
-      next: (detail) => {
-        this.characterDetail.set(detail);
-        this.loadingDetail.set(false);
-      },
-      error: (err) => {
-        this.characterDetail.set(null);
-        this.loadingDetail.set(false);
-        this.errorDetail.set(err);
-      },
-    });
   }
 
   applyFilters({ name, status }: { name: string; status: string }) {
@@ -127,5 +76,49 @@ export class CharactersPageComponent {
 
   onMarkFavorite(character: any) {
     this.store.dispatch(addFavorite({ character }));
+  }
+
+  private loadPage() {
+    this.characterService
+      .getCharacters({
+        name: this.filterName(),
+        status: this.filterStatus(),
+        page: this.pageIndex() + 1,
+      })
+      .subscribe({
+        next: (res) => {
+          this.dataSource.set(res.results);
+          this.totalResults.set(res.info.count);
+        },
+        error: () => {
+          this.dataSource.set([]);
+          this.totalResults.set(0);
+        },
+      });
+  }
+
+  private loadCharacterDetail(character: any) {
+    this.loadingDetail.set(true);
+    this.errorDetail.set(null);
+
+    this.characterGraphql.getCharacterDetail(character.id).subscribe({
+      next: (detail) => {
+        this.characterDetail.set(detail);
+        this.loadingDetail.set(false);
+      },
+      error: (err) => {
+        this.characterDetail.set(null);
+        this.loadingDetail.set(false);
+        this.errorDetail.set(err);
+      },
+    });
+  }
+  private getTotals(key: string) {
+    const result: { [key: string]: number } = {};
+    for (const char of this.dataSource()) {
+      const val = char[key] || 'Desconocido';
+      result[val] = (result[val] || 0) + 1;
+    }
+    return result;
   }
 }
