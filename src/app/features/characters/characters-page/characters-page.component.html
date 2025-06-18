@@ -1,0 +1,35 @@
+<section>
+  <app-filters-bar
+    [filterName]="filterName()"
+    [filterStatus]="filterStatus()"
+    (filtersChange)="applyFilters($event)"
+  ></app-filters-bar>
+
+  <app-favorite-bar></app-favorite-bar>
+  <div style="display: flex">
+    <div style="flex: 2">
+      <app-characters-table
+        [dataSource]="dataSource()"
+        [displayedColumns]="displayedColumns"
+        [pageSize]="pageSize"
+        [totalResults]="totalResults()"
+        [pageIndex]="pageIndex()"
+        (pageChange)="onPageChange($event)"
+        (select)="onSelect($event)"
+        (markFavorite)="onMarkFavorite($event)"
+      >
+      </app-characters-table>
+    </div>
+    <div style="flex: 1; margin-left: 24px">
+      <app-character-detail
+        [detail]="characterDetail()"
+        [loading]="loadingDetail()"
+        [error]="errorDetail()"
+      ></app-character-detail>
+    </div>
+  </div>
+  <app-totals-bar
+    [speciesTotals]="speciesTotals()"
+    [typeTotals]="typeTotals()"
+  ></app-totals-bar>
+</section>
