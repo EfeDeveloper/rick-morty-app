@@ -1,0 +1,23 @@
+<div
+  *ngIf="favorite$ | async as favorite"
+  class="favorite-bar"
+  style="
+    background: #f9fbe7;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  "
+  (click)="selectFavorite.emit(favorite)"
+>
+  <strong>Favorito:</strong>
+  <span>{{ favorite.name }}</span>
+  <img
+    [src]="favorite.image"
+    alt="{{ favorite.name }}"
+    width="48"
+    style="vertical-align: middle; border-radius: 50%; margin-left: 12px"
+  />
+  <button mat-button color="warn" (click)="removeFavorite(favorite.id)">
+    Quitar
+  </button>
+</div>
