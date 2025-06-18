@@ -1,0 +1,19 @@
+<div
+  *ngIf="speciesTotals && objectKeys(speciesTotals).length > 0"
+  style="margin-top: 12px"
+>
+  <strong>Totales por especie:</strong>
+  <span *ngFor="let key of objectKeys(speciesTotals); let last = last">
+    {{ key }}: {{ speciesTotals[key] }}<span *ngIf="!last"> | </span>
+  </span>
+</div>
+
+<div
+  *ngIf="typeTotals && objectKeys(typeTotals).length > 0"
+  style="margin-top: 8px"
+>
+  <strong>Totales por tipo:</strong>
+  <span *ngFor="let key of objectKeys(typeTotals); let last = last">
+    {{ key }}: {{ typeTotals[key] }}<span *ngIf="!last"> | </span>
+  </span>
+</div>
