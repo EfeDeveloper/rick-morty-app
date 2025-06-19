@@ -1,15 +1,12 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  GENDER_OPTIONS,
-  STATUS_OPTIONS,
-} from '@/core/constants/filters.constants';
-import { MultiSelectFilterComponent } from '../../shared/components/multi-select-filter/multi-select-filter.component';
+import { Component, Output, EventEmitter, Input, OnInit, OnChanges } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatInputModule } from '@angular/material/input'
+import { MatIconModule } from '@angular/material/icon'
+import { MatButtonModule } from '@angular/material/button'
+import { GENDER_OPTIONS, STATUS_OPTIONS } from '@/core/constants/filters.constants'
+import { MultiSelectFilterComponent } from '../../shared/components/multi-select-filter/multi-select-filter.component'
 
 @Component({
   selector: 'app-filters-bar',
@@ -24,31 +21,31 @@ import { MultiSelectFilterComponent } from '../../shared/components/multi-select
   ],
   templateUrl: './filters-bar.component.html',
 })
-export class FiltersBarComponent {
-  @Input() name: string = '';
-  @Input() status: string[] = [];
-  @Input() gender: string[] = [];
+export class FiltersBarComponent implements OnInit, OnChanges {
+  @Input() name: string = ''
+  @Input() status: string[] = []
+  @Input() gender: string[] = []
 
-  genderOptions = GENDER_OPTIONS;
-  statusOptions = STATUS_OPTIONS;
+  genderOptions = GENDER_OPTIONS
+  statusOptions = STATUS_OPTIONS
 
-  selectedStatus: string[] = [];
-  selectedGender: string[] = [];
+  selectedStatus: string[] = []
+  selectedGender: string[] = []
 
   @Output() filtersChange = new EventEmitter<{
-    name: string;
-    status: string[];
-    gender: string[];
-  }>();
+    name: string
+    status: string[]
+    gender: string[]
+  }>()
 
   ngOnInit() {
-    this.selectedStatus = [...this.status];
-    this.selectedGender = [...this.gender];
+    this.selectedStatus = [...this.status]
+    this.selectedGender = [...this.gender]
   }
 
   ngOnChanges() {
-    this.selectedStatus = [...this.status];
-    this.selectedGender = [...this.gender];
+    this.selectedStatus = [...this.status]
+    this.selectedGender = [...this.gender]
   }
 
   applyFilters() {
@@ -56,6 +53,6 @@ export class FiltersBarComponent {
       name: this.name,
       status: this.selectedStatus,
       gender: this.selectedGender,
-    });
+    })
   }
 }

@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core'
 
-import { MatTableModule } from '@angular/material/table';
-import { CommonModule, DatePipe } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table'
+import { CommonModule, DatePipe } from '@angular/common'
+import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatCardModule } from '@angular/material/card'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon'
 
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { Character } from '@/models/character.model';
-import { FallbackPipe } from '@/shared/pipes/fallback.pipe';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator'
+import { Character } from '@/models/character.model'
+import { FallbackPipe } from '@/shared/pipes/fallback.pipe'
 
 @Component({
   selector: 'app-characters-table',
@@ -31,32 +31,30 @@ import { FallbackPipe } from '@/shared/pipes/fallback.pipe';
   ],
 })
 export class CharactersTableComponent {
-  @Input() dataSource: any[] = [];
-  @Input() displayedColumns: string[] = [];
-  @Input() pageSize: number = 10;
-  @Input() totalResults: number = 0;
-  @Input() pageIndex: number = 0;
+  @Input() dataSource: Character[] = []
+  @Input() displayedColumns: string[] = []
+  @Input() pageSize: number = 10
+  @Input() totalResults: number = 0
+  @Input() pageIndex: number = 0
+  @Input() favorites: Character[] = []
 
-  @Output() pageChange = new EventEmitter<number>();
-  @Output() select = new EventEmitter<any>();
-  @Output() markFavorite = new EventEmitter<any>();
-  @Input() favorites: Character[] = [];
+  @Output() pageChange = new EventEmitter<number>()
+  @Output() characterSelect = new EventEmitter<Character>()
+  @Output() markFavorite = new EventEmitter<{ character: Character; isFavorite: boolean }>()
 
-  onPageChange(event: any) {
-    this.pageChange.emit(event.pageIndex);
+  onPageChange(event: PageEvent) {
+    this.pageChange.emit(event.pageIndex)
   }
-  onSelect(character: any) {
-    this.select.emit(character);
+  onSelect(character: Character) {
+    this.characterSelect.emit(character)
   }
 
   onMarkFavorite(character: Character) {
-    const isFav = this.isFavorite(character);
-    this.markFavorite.emit({ character, isFavorite: isFav });
+    const isFav = this.isFavorite(character)
+    this.markFavorite.emit({ character, isFavorite: isFav })
   }
 
   isFavorite(character: Character): boolean {
-    return (
-      this.favorites && this.favorites.some((fav) => fav.id === character.id)
-    );
+    return this.favorites && this.favorites.some((fav) => fav.id === character.id)
   }
 }
