@@ -1,19 +1,38 @@
-<div
-  *ngIf="speciesTotals && objectKeys(speciesTotals).length > 0"
-  style="margin-top: 12px"
->
-  <strong>Totales por especie:</strong>
-  <span *ngFor="let key of objectKeys(speciesTotals); let last = last">
-    {{ key }}: {{ speciesTotals[key] }}<span *ngIf="!last"> | </span>
-  </span>
-</div>
+<mat-card class="card--main">
+  <div class="gap-6 grid grid-cols-1 md:grid-cols-2">
+    <div *ngIf="speciesTotals && objectKeys(speciesTotals).length > 0">
+      <div class="mb-2 font-semibold text-gray-700">Totales por especie:</div>
+      <mat-chip-listbox
+        aria-label="Totales por especie"
+        class="flex flex-wrap gap-2 mb-2"
+      >
+        <mat-chip
+          *ngFor="let key of objectKeys(speciesTotals); let i = index"
+          [ngClass]="getColorClass(i)"
+          selected
+          class="font-medium text-base"
+        >
+          {{ key }}:
+          <span class="ml-1 text-current">{{ speciesTotals[key] }}</span>
+        </mat-chip>
+      </mat-chip-listbox>
+    </div>
 
-<div
-  *ngIf="typeTotals && objectKeys(typeTotals).length > 0"
-  style="margin-top: 8px"
->
-  <strong>Totales por tipo:</strong>
-  <span *ngFor="let key of objectKeys(typeTotals); let last = last">
-    {{ key }}: {{ typeTotals[key] }}<span *ngIf="!last"> | </span>
-  </span>
-</div>
+    <div *ngIf="typeTotals && objectKeys(typeTotals).length > 0">
+      <div class="mb-2 font-semibold text-gray-700">Totales por tipo:</div>
+      <mat-chip-listbox
+        aria-label="Totales por tipo"
+        class="flex flex-wrap gap-2"
+      >
+        <mat-chip
+          *ngFor="let key of objectKeys(typeTotals); let i = index"
+          [ngClass]="getColorClass(i)"
+          selected
+          class="font-medium text-base"
+        >
+          {{ key }}: <span class="ml-1 font-bold">{{ typeTotals[key] }}</span>
+        </mat-chip>
+      </mat-chip-listbox>
+    </div>
+  </div>
+</mat-card>
