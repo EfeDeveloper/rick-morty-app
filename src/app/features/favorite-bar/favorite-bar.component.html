@@ -1,23 +1,42 @@
-<div
-  *ngIf="favorite$ | async as favorite"
-  class="favorite-bar"
-  style="
-    background: #f9fbe7;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 8px;
-  "
-  (click)="selectFavorite.emit(favorite)"
->
-  <strong>Favorito:</strong>
-  <span>{{ favorite.name }}</span>
-  <img
-    [src]="favorite.image"
-    alt="{{ favorite.name }}"
-    width="48"
-    style="vertical-align: middle; border-radius: 50%; margin-left: 12px"
-  />
-  <button mat-button color="warn" (click)="removeFavorite(favorite.id)">
-    Quitar
-  </button>
-</div>
+<mat-card class="card--main">
+  <span class="font-extrabold text-gray-900 text-xl">Favorites</span>
+  <ng-container *ngIf="favorites$ | async as favorites">
+    <ng-container *ngIf="favorites.length; else noFavorites">
+      <mat-chip-listbox aria-label="Favorites">
+        <ng-container *ngFor="let fav of favorites | slice : 0 : 4">
+          <mat-chip-row
+            (removed)="removeFavorite(fav.id)"
+            selected
+            (click)="viewFavoriteDescription.emit(fav)"
+            class="!shadow-lg min-w-40"
+          >
+            <div class="flex justify-center items-center">
+              <img
+                [src]="fav.image"
+                width="26"
+                height="26"
+                class="mr-2 rounded-full object-cover shrink-0"
+              />
+              <span class="block flex-1 max-w-[82px] truncate">
+                {{ fav.name }}
+              </span>
+            </div>
+            <button matChipRemove aria-label="Remove favorite" tabindex="-1">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-chip-row>
+        </ng-container>
+        <ng-container *ngIf="favorites.length > 4">
+          <mat-chip
+            class="min-w-[60px] !font-medium cursor-default pointer-events-none"
+          >
+            +{{ favorites.length - 4 }} more
+          </mat-chip>
+        </ng-container>
+      </mat-chip-listbox>
+    </ng-container>
+    <ng-template #noFavorites>
+      <div class="font-medium text-gray-400">No favorites selected</div>
+    </ng-template>
+  </ng-container>
+</mat-card>

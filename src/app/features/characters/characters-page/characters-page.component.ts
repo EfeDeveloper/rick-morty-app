@@ -5,11 +5,14 @@ import { CommonModule } from '@angular/common';
 import { FiltersBarComponent } from '../../filters-bar/filters-bar.component';
 import { FavoriteBarComponent } from '@/features/favorite-bar/favorite-bar.component';
 import { CharacterDetailComponent } from '@/features/characters/character-detail/character-detail.component';
-import { addFavorite } from '@/store/favorite/favorite.actions';
+import { addFavorite, removeFavorite } from '@/store/favorite/favorite.actions';
 import { CharacterService } from '@/core/services/character.service';
 import { TotalsBarComponent } from '@/features/totals-bar/totals-bar.component';
 import { Store } from '@ngrx/store';
 import { CharacterGraphqlService } from '@/core/services/character-graphql.service';
+import { Character } from '@/models/character.model';
+import { Observable } from 'rxjs';
+import { AppState } from '@/store';
 
 @Component({
   selector: 'app-characters-page',
@@ -39,9 +42,11 @@ export class CharactersPageComponent {
   loadingDetail = signal(false);
   errorDetail = signal<any | null>(null);
   filterName = signal('');
-  filterStatus = signal('');
+  filterStatus = signal<string[]>([]);
+  filterGender = signal<string[]>([]);
+  favorites$: Observable<Character[]>;
 
-  pageSize = 10;
+  pageSize = 20;
   pageIndex = signal(0);
   totalResults = signal(0);
 
@@ -51,16 +56,27 @@ export class CharactersPageComponent {
   constructor(
     private characterService: CharacterService,
     private characterGraphql: CharacterGraphqlService,
-    private store: Store
-  ) {}
+    private store: Store<AppState>
+  ) {
+    this.favorites$ = this.store.select((state) => state.favorite.characters);
+  }
 
   ngOnInit() {
     this.loadPage();
   }
 
-  applyFilters({ name, status }: { name: string; status: string }) {
+  applyFilters({
+    name,
+    status,
+    gender,
+  }: {
+    name: string;
+    status: string[];
+    gender: string[];
+  }) {
     this.filterName.set(name);
     this.filterStatus.set(status);
+    this.filterGender.set(gender);
     this.pageIndex.set(0);
     this.loadPage();
   }
@@ -70,19 +86,25 @@ export class CharactersPageComponent {
     this.loadPage();
   }
 
-  onSelect(character: any) {
+  onSelectCharacter(character: any) {
+    this.characterDetail.set(null);
     this.loadCharacterDetail(character);
   }
 
-  onMarkFavorite(character: any) {
-    this.store.dispatch(addFavorite({ character }));
+  onMarkFavorite(character: Character, isFavorite: boolean) {
+    if (isFavorite) {
+      this.store.dispatch(removeFavorite({ characterId: character.id }));
+    } else {
+      this.store.dispatch(addFavorite({ character }));
+    }
   }
 
   private loadPage() {
     this.characterService
       .getCharacters({
         name: this.filterName(),
-        status: this.filterStatus(),
+        status: this.filterStatus()[0] || '',
+        gender: this.filterGender()[0] || '',
         page: this.pageIndex() + 1,
       })
       .subscribe({

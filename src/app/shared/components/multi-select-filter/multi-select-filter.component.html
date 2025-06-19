@@ -1,0 +1,23 @@
+<mat-form-field class="w-full h-full">
+  <mat-label>{{ label }}</mat-label>
+  <mat-select [formControl]="control" multiple>
+    <mat-select-trigger>
+      <span *ngIf="count > 0">
+        <span>
+          {{ firstLabel }}
+        </span>
+        <span *ngIf="count > 1"> (+{{ count - 1 }}) </span>
+      </span>
+    </mat-select-trigger>
+    <ng-container *ngFor="let option of options">
+      <mat-option [value]="option.value">
+        <span
+          class="inline-block px-2 py-1 rounded-lg font-medium text-sm"
+          [ngClass]="option.color"
+        >
+          {{ option.label }}
+        </span>
+      </mat-option>
+    </ng-container>
+  </mat-select>
+</mat-form-field>

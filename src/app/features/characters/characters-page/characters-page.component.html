@@ -1,26 +1,36 @@
-<section>
+<section
+  class="flex flex-col gap-5 mx-auto px-2 sm:px-4 md:px-8 py-4 w-full max-w-screen-2xl"
+>
   <app-filters-bar
-    [filterName]="filterName()"
-    [filterStatus]="filterStatus()"
+    [name]="filterName()"
+    [status]="filterStatus()"
+    [gender]="filterGender()"
     (filtersChange)="applyFilters($event)"
+    class="mb-4"
   ></app-filters-bar>
 
-  <app-favorite-bar></app-favorite-bar>
-  <div style="display: flex">
-    <div style="flex: 2">
+  <app-favorite-bar
+    (viewFavoriteDescription)="onSelectCharacter($event)"
+    class="mb-4"
+  ></app-favorite-bar>
+
+  <div class="items-start gap-5 grid grid-cols-1 lg:grid-cols-3 mb-6">
+    <div class="lg:col-span-2 w-full">
       <app-characters-table
         [dataSource]="dataSource()"
         [displayedColumns]="displayedColumns"
         [pageSize]="pageSize"
         [totalResults]="totalResults()"
         [pageIndex]="pageIndex()"
+        [favorites]="(favorites$ | async) || []"
         (pageChange)="onPageChange($event)"
-        (select)="onSelect($event)"
-        (markFavorite)="onMarkFavorite($event)"
-      >
-      </app-characters-table>
+        (select)="onSelectCharacter($event)"
+        (markFavorite)="onMarkFavorite($event.character, $event.isFavorite)"
+        class="w-full"
+      ></app-characters-table>
     </div>
-    <div style="flex: 1; margin-left: 24px">
+
+    <div class="w-full">
       <app-character-detail
         [detail]="characterDetail()"
         [loading]="loadingDetail()"
@@ -28,8 +38,10 @@
       ></app-character-detail>
     </div>
   </div>
+
   <app-totals-bar
     [speciesTotals]="speciesTotals()"
     [typeTotals]="typeTotals()"
+    class="mt-4"
   ></app-totals-bar>
 </section>
