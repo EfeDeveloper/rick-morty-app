@@ -4,19 +4,30 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from '@/store';
 import { removeFavorite } from '@/store/favorite/favorite.actions';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-favorite-bar',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatChipsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+  ],
   templateUrl: './favorite-bar.component.html',
 })
 export class FavoriteBarComponent {
-  @Output() selectFavorite = new EventEmitter<any>();
-  favorite$: Observable<any>;
+  @Output() viewFavoriteDescription = new EventEmitter<any>();
+  favorites$: Observable<any[]>;
 
   constructor(private store: Store<AppState>) {
-    this.favorite$ = this.store.pipe(
-      select((state) => state.favorite.character)
+    this.favorites$ = this.store.pipe(
+      select((state) => state.favorite.characters)
     );
   }
 
