@@ -1,11 +1,6 @@
-import { createAction, props } from '@ngrx/store';
+import { Character } from '@/models/character.model'
+import { createAction, props } from '@ngrx/store'
 
-export const addFavorite = createAction(
-  '[Favorite] Add',
-  props<{ character: any }>()
-);
+export const addFavorite = createAction('[Favorite] Add', props<{ character: Character }>())
 
-export const removeFavorite = createAction(
-  '[Favorite] Remove',
-  props<{ characterId: string }>()
-);
+export const removeFavorite = createAction('[Favorite] Remove', props<{ characterId: string }>())

@@ -16,6 +16,8 @@
                 width="26"
                 height="26"
                 class="mr-2 rounded-full object-cover shrink-0"
+                alt="{{ fav.name }} image"
+                loading="lazy"
               />
               <span class="block flex-1 max-w-[82px] truncate">
                 {{ fav.name }}
@@ -27,9 +29,7 @@
           </mat-chip-row>
         </ng-container>
         <ng-container *ngIf="favorites.length > 4">
-          <mat-chip
-            class="min-w-[60px] !font-medium cursor-default pointer-events-none"
-          >
+          <mat-chip class="min-w-[60px] !font-medium cursor-default pointer-events-none">
             +{{ favorites.length - 4 }} more
           </mat-chip>
         </ng-container>

@@ -1,6 +1,4 @@
-<section
-  class="flex flex-col gap-5 mx-auto px-2 sm:px-4 md:px-8 py-4 w-full max-w-screen-2xl"
->
+<section class="flex flex-col gap-5 mx-auto px-2 sm:px-4 md:px-8 py-4 w-full max-w-screen-2xl">
   <app-filters-bar
     [name]="filterName()"
     [status]="filterStatus()"
@@ -24,7 +22,7 @@
         [pageIndex]="pageIndex()"
         [favorites]="(favorites$ | async) || []"
         (pageChange)="onPageChange($event)"
-        (select)="onSelectCharacter($event)"
+        (characterSelect)="onSelectCharacter($event)"
         (markFavorite)="onMarkFavorite($event.character, $event.isFavorite)"
         class="w-full"
       ></app-characters-table>
